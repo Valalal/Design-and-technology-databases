@@ -15,6 +15,6 @@ repos:
     hooks:
       - id: django-tests
         name: django tests
-        entry: python ./project8sem/manage.py test
+        entry: python3 ./project8sem/manage.py test
         language: system
         pass_filenames: false
