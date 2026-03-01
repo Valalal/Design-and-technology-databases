@@ -20,6 +20,7 @@
 
             {% if user.is_authenticated %}
                 <a class="btn btn-outline-success btn-sm" href="#">Профиль ({{ user.username }})</a>
+                <a class="btn btn-outline-light btn-sm" href="{% url 'logout' %}">Выйти</a>
             
             {% else %}
                 <a class="btn btn-outline-primary btn-sm" href="{% url 'register' %}">Регистрация</a>
