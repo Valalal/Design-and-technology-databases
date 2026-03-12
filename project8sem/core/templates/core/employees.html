@@ -18,6 +18,7 @@
                             <th>ФИО</th>
                             <th>Должность</th>
                             <th>Подразделение</th>
+                            <th>Сектор</th>  <!-- Новая колонка -->
                         </tr>
                     </thead>
                     <tbody>
@@ -26,6 +27,13 @@
                             <td>{{ emp.user.last_name }} {{ emp.user.first_name }}</td>
                             <td>{{ emp.position }}</td>
                             <td>{{ emp.department }}</td>
+                            <td>
+                                {% if emp.sector %}
+                                    {{ emp.sector }}
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>

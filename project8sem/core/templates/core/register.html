@@ -8,40 +8,124 @@
 
         <div class="card shadow-sm">
             <div class="card-body">
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
                 <form method="post">
                     {% csrf_token %}
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Имя</label>
-                            <input class="form-control" name="first_name">
+                            <input class="form-control {% if form.first_name.errors %}is-invalid{% endif %}" 
+                                   name="first_name" 
+                                   value="{{ form.first_name.value|default:'' }}">
+                            {% if form.first_name.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.first_name.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Фамилия</label>
-                            <input class="form-control" name="last_name">
+                            <input class="form-control {% if form.last_name.errors %}is-invalid{% endif %}" 
+                                   name="last_name"
+                                   value="{{ form.last_name.value|default:'' }}">
+                            {% if form.last_name.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.last_name.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Логин</label>
-                        <input class="form-control" name="username">
+                        <input class="form-control {% if form.username.errors %}is-invalid{% endif %}" 
+                               name="username"
+                               value="{{ form.username.value|default:'' }}">
+                        {% if form.username.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.username.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Пароль</label>
-                        <input type="password" class="form-control" name="password">
+                        <input type="password" class="form-control {% if form.password.errors or form.confirm_password.errors %}is-invalid{% endif %}" 
+                               name="password">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Подтверждение пароля</label>
+                        <input type="password" class="form-control {% if form.confirm_password.errors or form.non_field_errors %}is-invalid{% endif %}" 
+                               name="confirm_password">
+                        {% if form.confirm_password.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.confirm_password.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
 
                     <hr class="my-4">
 
                     <div class="mb-3">
                         <label class="form-label">Должность</label>
-                        <input class="form-control" name="position">
+                        <input class="form-control {% if form.position.errors %}is-invalid{% endif %}" 
+                               name="position"
+                               value="{{ form.position.value|default:'' }}">
+                        {% if form.position.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.position.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-3">
                         <label class="form-label">Подразделение</label>
-                        <input class="form-control" name="department">
+                        <input class="form-control {% if form.department.errors %}is-invalid{% endif %}" 
+                               name="department"
+                               value="{{ form.department.value|default:'' }}">
+                        {% if form.department.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.department.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- НОВОЕ ПОЛЕ: Сектор -->
+                    <div class="mb-4">
+                        <label class="form-label">Сектор</label>
+                        <input class="form-control {% if form.sector.errors %}is-invalid{% endif %}" 
+                               name="sector"
+                               value="{{ form.sector.value|default:'' }}"
+                               placeholder="Например: Разработки, Тестирования и т.д.">
+                        {% if form.sector.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.sector.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <small class="form-text text-muted">Необязательное поле</small>
                     </div>
 
                     <button class="btn btn-success w-100">

@@ -4,9 +4,10 @@ from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, ListView
+from django.views.generic import ListView
 
 from .models import Employee
+from .forms import UserRegistrationForm
 
 
 class UserLoginView(View):
@@ -53,30 +54,38 @@ class UserRegisterView(View):
         # Если пользователь уже авторизован — редирект
         if request.user.is_authenticated:
             return redirect("employees")
-        return render(request, self.template_name)
+        form = UserRegistrationForm()
+        return render(request, self.template_name, {'form': form})
         # return self.render_to_response()
 
     def post(self, request):
-        user = User.objects.create_user(
-            username=request.POST.get("username"),
-            password=request.POST.get("password"),
-            first_name=request.POST.get("first_name"),
-            last_name=request.POST.get("last_name"),
-        )
+        form = UserRegistrationForm(request.POST)
 
-        Employee.objects.create(
-            user=user,
-            position=request.POST.get("position"),
-            department=request.POST.get("department"),
-        )
+        if form.is_valid():
+            try:
+                # Создаем пользователя
+                user = User.objects.create_user(
+                    username=form.cleaned_data['username'],
+                    password=form.cleaned_data['password'],
+                    first_name=form.cleaned_data['first_name'],
+                    last_name=form.cleaned_data['last_name'],
+                )
 
-        return redirect(self.success_url)
+                # Создаем сотрудника
+                Employee.objects.create(
+                    user=user,
+                    position=form.cleaned_data['position'],
+                    department=form.cleaned_data['department'],
+                    sector=form.cleaned_data.get('sector', ''),
+                )
 
-    def render_to_response(self, **context):
-        return TemplateView.as_view(
-            template_name=self.template_name,
-            extra_context=context,
-        )(self.request)
+                return redirect(self.success_url)
+            except Exception as e:
+                # В случае ошибки при создании, добавляем сообщение в форму
+                form.add_error(None, f'Ошибка при регистрации: {str(e)}')
+
+        # Если форма не валидна, возвращаем страницу с ошибками
+        return render(request, self.template_name, {'form': form})
 
 
 class EmployeeListView(LoginRequiredMixin, ListView):

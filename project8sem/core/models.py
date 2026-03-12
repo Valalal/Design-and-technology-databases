@@ -6,6 +6,7 @@ class Employee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     position = models.CharField(max_length=100)
     department = models.CharField(max_length=100)
+    sector = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return f"{self.user.last_name} {self.user.first_name}"

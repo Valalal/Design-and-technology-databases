@@ -36,6 +36,7 @@ class RegisterViewTests(TestCase):
             {
                 "username": "petrov",
                 "password": "12345",
+                "confirm_password": "12345",
                 "first_name": "Петр",
                 "last_name": "Петров",
                 "position": "Оператор",
